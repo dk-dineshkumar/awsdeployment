@@ -34,4 +34,6 @@ jobs:
         run: |
             cd build
             pwd
+            touch Procfile
+            echo web: npx serve >> Procfile #to run the applications once the build deployed successfully
             zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./
