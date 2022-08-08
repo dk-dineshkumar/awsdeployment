@@ -37,3 +37,18 @@ jobs:
             touch Procfile
             echo web: npx serve >> Procfile #to run the applications once the build deployed successfully
             zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY }}
+            aws-secret-access-key: ${{ secrets.VALUE }}
+            aws-region: ${{ env.AWS_REGION_NAME }}
+
+      - name: Copy ZIP file to S3 bucket
+        run: |
+            cd build
+            pwd
+            aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.AWS_BUCKET_NAME }}
+      - name: Completion of CI Pipleline
+      run: echo "Build finished successfully"
