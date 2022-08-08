@@ -51,4 +51,4 @@ jobs:
             pwd
             aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.AWS_BUCKET_NAME }}
       - name: Completion of CI Pipleline
-      run: echo "Build finished successfully"
+        run: echo "Build finished successfully"
