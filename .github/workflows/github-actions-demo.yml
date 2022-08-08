@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -34,6 +34,4 @@ jobs:
         run: |
             cd build
             pwd
-            touch Procfile
-            echo web: npx serve >> Procfile #to run the applications once the build deployed successfully
             zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./
