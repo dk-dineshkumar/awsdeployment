@@ -59,3 +59,23 @@ jobs:
             aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.AWS_BUCKET_NAME }}
       - name: Completion of CI Pipleline
         run: echo "Build finished successfully"
+
+  deploy:
+    runs-on: self-hosted
+    needs: [ build ]
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.KEY }}
+          aws-secret-access-key: ${{ secrets.VALUE }}
+          aws-region: ${{ env.AWS_REGION_NAME }}
+
+      - name: Create new ElasticBeanStalk Version
+        run: |
+          aws elasticbeanstalk create-application-version --application-name reactapp --source-bundle '{"S3Bucket":"${{ env.AWS_BUCKET_NAME }}","S3Key": "${{ env.DEPLOY_PACKAGE_NAME }}"}' --version-label "Ver-${{ github.sha }}" --description "${{ github.sha }}"
+      - name: Deploy new version to EBS
+        run: aws elasticbeanstalk update-environment --environment-name ${{ env.EB_APP_ENV_NAME }} --version-label "Ver-${{ github.sha }}"
+
+      - name: Completion of CD Pipleline
+        run: echo "Deployment finished successfully"
