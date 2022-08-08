@@ -31,7 +31,7 @@ jobs:
       - run: npm test
 
       - name: Compress build to ZIP file
-          run: |
+        run: |
             cd build
             pwd
             touch Procfile
